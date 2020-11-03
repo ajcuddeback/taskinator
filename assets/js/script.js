@@ -46,6 +46,7 @@ var createTaskEl = function(taskDataObj) {
 
     // add task id as a custom attribute
     listItemEl.setAttribute("data-task-id", taskIdCounter);
+    listItemEl.setAttribute("draggable", "true")
 
     //create div to hold task info and add to list item
     var taskInfoEl = document.createElement("div");
@@ -176,5 +177,24 @@ var completeEditTask = function(taskName, taskType, taskId) {
     }
   };
 
+var dragTaskHandler = function(event) {
+    //event.target targets the elements attributes. You can store this attribute in a variable and define which attribute using the getAttribute function
+    var taskId = event.target.getAttribute("data-task-id");
+    event.dataTransfer.setData("text/plain", taskId);
+    
+    var getId = event.dataTransfer.getData("text/plain");
+    console.log("get id: ", getId, typeof getId);
+};
+
+var dropZoneDragHandler = function(event) {
+    var taskListEl = event.target.closest(".task-list");
+    if (taskListEl) {
+        event.preventDefault();
+        console.dir(taskListEl);
+    }
+};
+
 pageContentEl.addEventListener("click", taskButtonHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
+pageContentEl.addEventListener("dragstart", dragTaskHandler);
+pageContentEl.addEventListener("dragover", dropZoneDragHandler);
