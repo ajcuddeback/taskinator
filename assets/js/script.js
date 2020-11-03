@@ -69,6 +69,8 @@ var createTaskEl = function(taskDataObj) {
     tasks.push(taskDataObj);
     // increase task counter for next unique id
     taskIdCounter++;
+
+    saveTasks();
 };
 
 var createTaskActions = function(taskId) {
@@ -151,7 +153,7 @@ var deleteTask = function(taskId) {
     var updatedTaskArr = [];
 
     //loop throught current tasks
-    for (var i = 0; i < tasks.length; i++) {
+    for (var i = 0; i < tasks.length; i++) { 
         // if tasks[i].id doesn't match the value of taskIdm let's keep that task and push it into the new array
         if (tasks[i].id !== parseInt(taskId)) {
             updatedTaskArr.push(tasks[i]);
@@ -160,6 +162,8 @@ var deleteTask = function(taskId) {
 
     // reasign tasks array to be the same as updatedtaskArr
     tasks = updatedTaskArr;
+
+    saveTasks();
 };
 
 var completeEditTask = function(taskName, taskType, taskId) {
@@ -177,6 +181,8 @@ var completeEditTask = function(taskName, taskType, taskId) {
             tasks[i].type = taskType;
         }
     }
+
+    saveTasks();
 
     alert("Tasks updated!")
 
@@ -206,6 +212,7 @@ var completeEditTask = function(taskName, taskType, taskId) {
             tasks[i].status = statusValue;
         }
     }
+    saveTasks();
 };
 
 var dragTaskHandler = function(event) {
@@ -254,6 +261,7 @@ var dropTaskHandler = function(event) {
             tasks[i].status = statusSelectEl.value.toLowerCase();
         }
     }
+    saveTasks();
 };
 
 var dragLeaveHandler = function(event) {
@@ -263,6 +271,9 @@ var dragLeaveHandler = function(event) {
     }
 };
 
+var saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 pageContentEl.addEventListener("click", taskButtonHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
 pageContentEl.addEventListener("dragstart", dragTaskHandler);
